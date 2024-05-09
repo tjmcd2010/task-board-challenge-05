@@ -1,10 +1,10 @@
 // Create variables from index.html to call on
-const taskTitle = $("#task-title");
-const taskDescription = $("#task-description");
-const taskDate = $("#task-date");
-const submitBtn = $("#submit");
-const closeBtn = $("#close");
+const closeBtn = $("#close-btn");
 const taskForm = $("#task-form");
+const taskTitle = $("#task-title");
+const taskDate = $("#task-date");
+const taskDescription = $("#task-description");
+const submitBtn = $("#submit");
 const todoCards = $("#todo-cards");
 const inProgressCards = $("#in-progress-cards");
 const doneCards = $("#done-cards");
@@ -13,137 +13,139 @@ const doneCards = $("#done-cards");
 let taskList = JSON.parse(localStorage.getItem("tasks"));
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
-/**
- * Generates a unique task ID using the current timestamp and a random number.
- * @returns {string} The generated task ID.
- */
+// Generates a unique task ID with a unique task ID
+
 function generateTaskId() {
-  const timestamp = new Date().getTime();
-  const randomNum = Math.floor(Math.random() * 1000);
-  const taskId = `${timestamp}${randomNum}`;
+  const taskId = Math.floor(Math.random() * 1000);
   return taskId;
 }
 
-/**
- * Creates a task card element with the provided task data.
- * @param {object} task - The task object containing task details.
- * @returns {jQuery} The created task card element.
- */
+// Creates a task card element with the provided task data. Upon creation these task cards should be draggable, droppable and sortable. 
+//They should include the "task-title", the "task-description" and "task-date" ids.
+
 function createTaskCard(task) {
-  const taskCard = $('<div>')
-    .addClass('card text-center my-3 draggable droppable sortable')
-    .attr('data-task-id', taskList.id);
-  const dateEl = $('<p>')
-    .addClass('card-text')
+  const taskCard = $("<div>")
+    .addClass("card")
+    .attr("data-task-id", task.id);
+
+  const dateEl = $("<p>")
+    .addClass("card-title")
     .text(task.date);
-  const titleEl = $('<h5>')
-    .addClass('card-title')
+
+    const cardBody = $('<div>')
+        .addClass('card-body text');
+
+  const titleEl = $("<h5>")
+    .addClass("card-title")
     .text(task.title);
-  const descriptionEl = $('p')
-    .addClass('card-text')
+
+  const descriptionEl = $("<p>")
+    .addClass("card-text")
     .text(task.description);
+    
   const deleteBtn = $('<button>')
     .addClass('btn btn-danger')
     .text('Delete')
-    .on('click', handleDeleteTask);
+    deleteBtn.on('click', handleDeleteTask);
   
+   // Add color coding to task card based on due date. The background should be white if the due date is later than today, red if it's due-date is earlier than today and yellow if today is the due date
+   const today = dayjs();
+   const dueDate = dayjs(task.date, 'DD/MM/YYYY');
+   const diff = dueDate.diff(today, 'days');
+   if (diff < 0) {
+     taskCard.addClass('bg-danger');
+   } else if (diff === 0) {
+     taskCard.addClass('bg-warning');
+   } else {
+     taskCard.addClass('bg-success');
+   }
+
   // Append elements to task card
   taskCard.append(dateEl, titleEl, descriptionEl, deleteBtn);
-  
-  return taskCard;
 }
 
-/**
- * Renders the task list and makes cards draggable.
- */
+
+// Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-  const taskList = JSON.parse(localStorage.getItem("tasks"));
-  todoCards.empty();
-  inProgressCards.empty();
-  doneCards.empty();
-  
-  for (const task of taskList) {
-    const taskCard = createTaskCard(task);
+    todoCards.empty();
+    inProgressCards.empty();
+    doneCards.empty();
     
-    if (task.status === "todo") {
-      todoCards.append(taskCard);
-    } else if (task.status === "in-progress") {
-      inProgressCards.append(taskCard);
-    } else if (task.status === "done") {
-      doneCards.append(taskCard);
+    for (const task of taskList) {
+      const taskCard = createTaskCard(task);
+      
+      if (task.status === "todo") {
+        todoCards.append(taskCard);
+      } else if (task.status === "in-progress") {
+        inProgressCards.append(taskCard);
+      } else if (task.status === "done") {
+        doneCards.append(taskCard);
+      }
     }
-  }
+
 }
 
-/**
- * Handles adding a new task.
- * @param {Event} event - The event object triggered by the submission of the task form.
- */
-function handleAddTask(event) {
-  event.preventDefault();
-  const taskId = generateTaskId();
-  const taskTitle = $("#task-title").val();
-  const taskDescription = $("#task-description").val();
-  const taskDate = $("#task-date").val();
-  const task = {
-    id: taskId,
-    title: taskTitle,
-    description: taskDescription,
-    date: taskDate,
-    status: "todo"
-  };
-  
-  taskList.push(task);
-  localStorage.setItem("tasks", JSON.stringify(taskList));
-  renderTaskList();
-  taskForm.trigger("reset");
+// Todo: create a function to handle adding a new task
+function handleAddTask(event){
+    event.preventDefault();
+    const taskId = generateTaskId();
+    const taskTitle = $("#task-title").val();
+    const taskDescription = $("#task-description").val();
+    const taskDate = $("#task-date").val();
+    const task = {
+        id: taskId,
+        title: taskTitle,
+        description: taskDescription,
+        date: taskDate,
+        status: "todo"
+    }
+    taskList.push(task);
+    renderTaskList();
+
 }
 
-/**
- * Handles deleting a task.
- * @param {Event} event - The event object triggered by clicking the delete button.
- */
-function handleDeleteTask(event) {
-  const taskId = $(this).parent().data("task-id");
-  taskList = taskList.filter(task => task.id !== taskId);
-  localStorage.setItem("tasks", JSON.stringify(taskList));
-  renderTaskList();
+// Todo: create a function to handle deleting a task
+function handleDeleteTask(event){
+    const taskId = $(this).parent().data("task-id");
+    taskList = taskList.filter(task => task.id !== taskId);
+    localStorage.setItem("tasks", JSON.stringify(taskList));
+    renderTaskList();
 }
+    
 
-/**
- * Handles dropping a task into a new status lane.
- * @param {Event} event - The event object triggered by dropping a task card.
- * @param {jQueryUI} ui - The jQuery UI object containing information about the dropped element.
- */
+// Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-  const taskId = ui.draggable.data("task-id");
-  const newStatus = $(this).data("status");
-  const task = taskList.find(task => task.id === taskId);
-  task.status = newStatus;
-  localStorage.setItem("tasks", JSON.stringify(taskList));
-  renderTaskList();
+    const taskId = ui.draggable.data("task-id");
+    const newStatus = $(this).data("status");
+    const task = taskList.find(task => task.id === taskId);
+    task.status = newStatus;
+    localStorage.setItem("tasks", JSON.stringify(taskList));
+    renderTaskList();
+    console.log(taskList);
+
 }
 
-// When the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+// Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
-  renderTaskList();
-  taskForm.on("submit", handleAddTask);
-  $(".droppable").droppable({
-    drop: handleDrop
-  });
-  $("#task-date").datepicker();
-  $(".sortable").sortable();
-  $(".sortable").disableSelection();
-  $(".draggable").draggable();
-  $(".draggable").disableSelection();
-  closeBtn.on("click", function () {
-    taskForm.trigger("reset");
-  });
-  taskForm.on("reset", function () {
-    closeBtn.trigger("click");
-  });
-  taskForm.on("submit", function () {
-    closeBtn.trigger("click");
-  });
-});
+    renderTaskList();
 
+    
+    // Makes lanes droppable.
+    $('.lane').droppable({
+        accept: '.draggable',
+        drop: handleDrop,
+    });
+
+    //make the task-date field a date picker in the format of "yyyy-MM-dd"
+
+
+    //adds event listener to task modal to submit task card
+    submitBtn.on('click', handleAddTask);
+    
+    // Closes modal when clicking on "x" in top right corner of modal.
+    $('#close-btn').on('click', function() {
+        const modalId = $(this).closest('.modal').attr('id');
+        $('#' + modalId).modal('hide');
+    });
+});
+   

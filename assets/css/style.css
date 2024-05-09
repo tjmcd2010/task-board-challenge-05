@@ -21,9 +21,10 @@ body {
   color: white;
   }
   
-  .task-modal {
-    display: none;
-    position: fixed;
-    background-color: green;
+
+  .close-btn {
+    color: rgb(203, 45, 45);
+    float: right;
+    font-size: 20px;
   }
 
