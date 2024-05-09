@@ -137,7 +137,10 @@ $(document).ready(function () {
     });
 
     //make the task-date field a date picker in the format of "yyyy-MM-dd"
-
+    $('#task-date').datepicker({
+        changeMonth: true,
+        changeYear: true,
+    });
 
     //adds event listener to task modal to submit task card
     submitBtn.on('click', handleAddTask);
