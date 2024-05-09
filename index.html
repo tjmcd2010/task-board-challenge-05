@@ -25,27 +25,40 @@
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
     <!-- Todo: Create a modal with a form to gather data for Task Title, Task Due Date and Task Description -->
-    <div id="task-modal" class="task-modal">
-      <div class="modal-conent">
-        <h3>Add a New Task!</h3>
-        <span class="close">&times;</span>
-        <form id="task-form">
-          <div class="form-group">
-            <label for="taskTitle">Title</label>
-            <input name="taskTitle" class="form-control mb-3" placeholder="Task Title" autocomplete="off" type="text"/>
+    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">Add a New Task!</h3>
+            <button type="button" id="close-btn" class="close-btn" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="form-group">
-            <label for="taskDate">Date</label>
-            <input name="taskDate" class="form-control mb-3" placeholder="Task Due Date" autocomplete="off" type="date"/>
+          <div class="modal-body">
+            <form id="task-form" class="row g-3">
+              <div class="mb-2">
+                 <label for="task-title">Task Title</label>
+                    <input id="task-title" placeholder="Enter Task Title Here" type="text" autocomplete="off" class="form-control"/>
+                      </div>
+              <div class="mb-2">
+                  <label for="task-date">Due Date</label>
+                    <input id="task-date" placeholder="Task Due Date"  type="date" class="form-control"/>
+                       </div>
+              <div class="mb-2">
+                    <label for="task-description">Describe your task</label>
+                    <textarea id="task-description" placeholder="Describe your task" autocomplete="off" class="form-control" rows="5" cols="30"></textarea>
+                </div>
+            <div>
+                <button id = "submit" type = "submit" class = "btn btn-outline-success btn-lg shadow">Submit</button>
+              </div><br>
+            </form>
           </div>
-          <div class="form-group">
-            <label for="taskDescription">Description</label>
-            <textarea name="taskDescription" class="form-control mb-3" placeholder="Task Description" autocomplete="off"></textarea>
-          </div>
-          <button type="submitBtn" id="submit">Add Task</button>
-        </form>
+        </div>
       </div>
-    </div>
+    </div></div>
+
+
+
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
