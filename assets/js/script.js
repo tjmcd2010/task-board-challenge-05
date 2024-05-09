@@ -87,11 +87,15 @@ function renderTaskList() {
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
+    if (!taskTitle.val() || !taskDescription.val() || !taskDate.val()) {
+        alert("Please fill in all fields");
+        return;
+    }
     event.preventDefault();
     const taskId = generateTaskId();
-    const taskTitle = $("#task-title").val();
-    const taskDescription = $("#task-description").val();
-    const taskDate = $("#task-date").val();
+    const title = $("#task-title").val();
+    const description = $("#task-description").val();
+    const date = $("#task-date").val();
     const task = {
         id: taskId,
         title: taskTitle,
@@ -123,7 +127,10 @@ function handleDrop(event, ui) {
     renderTaskList();
     console.log(taskList);
 
-}
+}// Renders the task list, adds event listeners, makes lanes droppable, and turns due date field into a date picker.
+
+taskForm.on('click', '.btn-delete-task', handleDeleteTask);
+submitBtn.on('click', handleAddTask);
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
@@ -142,8 +149,7 @@ $(document).ready(function () {
         changeYear: true,
     });
 
-    //adds event listener to task modal to submit task card
-    submitBtn.on('click', handleAddTask);
+
     
     // Closes modal when clicking on "x" in top right corner of modal.
     $('#close-btn').on('click', function() {
