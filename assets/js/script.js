@@ -10,7 +10,7 @@ const inProgressCards = $("#in-progress-cards");
 const doneCards = $("#done-cards");
 
 // Retrieve tasks and nextId from localStorage
-let taskList = JSON.parse(localStorage.getItem("tasks"));
+let taskList = JSON.parse(localStorage.getItem("tasks")) || []; 
 let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 // Generates a unique task ID with a unique task ID
