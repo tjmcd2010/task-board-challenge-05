@@ -42,3 +42,6 @@ THEN the saved tasks persist ✅
 
 ![Local Storage Demo](assets/images/Deployed-Project-with-Local-Storage.png)
 
+![Final Screenshot](assets/images/final-screenshot.png)
+
+<video controls src="assets/images/Demo.mp4" title="live Demo"></video>
